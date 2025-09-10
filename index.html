@@ -1,0 +1,1314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 7 Wednesday & Thursday Practice Quiz</title>
+<style>
+/* --- Color Variables --- */
+:root {
+/* Default: Dark Theme */
+--bg-color: #2d343e; /* Dark background */
+--container-bg: #3c424f; /* Slightly lighter container */
+--text-color: #e8e6e3; /* Light text */
+--question-text-color: #8ab4f8; /* Light blue for questions */
+--lo-text-color: #b0c4de; /* Lighter blue for learning objective */
+--border-color: #555; /* Darker borders */
+--separator-color: #4a4f5a;
+--label-bg: #454c5a;
+--label-border: #6c757d;
+--label-hover-bg: #525966;
+--label-hover-border: #7a828a;
+--button-bg: #8ab4f8;
+--button-text: #202124;
+--button-hover-bg: #a3c5f9;
+--button-disabled-bg: #5f6368;
+--feedback-correct-bg: #344e41;
+--feedback-correct-text: #c7f9cc;
+--feedback-correct-border: #52b788;
+--feedback-incorrect-bg: #5e2129;
+--feedback-incorrect-text: #f8d7da;
+--feedback-incorrect-border: #a4133c;
+--feedback-rationale-text: #adb5bd; /* Lighter gray for rationale */
+--feedback-source-text: #c7d3e0;
+--feedback-separator: #6c757d;
+--radio-accent: #8ab4f8;
+}
+
+.light-theme {
+    --bg-color: #eef2f7;
+    --container-bg: #ffffff;
+    --text-color: #343a40;
+    --question-text-color: #0056b3;
+    --lo-text-color: #5a6e8a;
+    --border-color: #dee2e6;
+    --separator-color: #e9ecef;
+    --label-bg: #f8f9fa;
+    --label-border: #ced4da;
+    --label-hover-bg: #e2e6ea;
+    --label-hover-border: #adb5bd;
+    --button-bg: #007bff;
+    --button-text: white;
+    --button-hover-bg: #0056b3;
+    --button-disabled-bg: #6c757d;
+    --feedback-correct-bg: #d1e7dd;
+    --feedback-correct-text: #0f5132;
+    --feedback-correct-border: #badbcc;
+    --feedback-incorrect-bg: #f8d7da;
+    --feedback-incorrect-text: #842029;
+    --feedback-incorrect-border: #f5c2c7;
+    --feedback-rationale-text: #495057;
+    --feedback-source-text: #343a40;
+    --feedback-separator: #ccc;
+    --radio-accent: #007bff;
+}
+
+/* --- General Styles --- */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    line-height: 1.7;
+    margin: 0;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    padding-bottom: 40px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+#theme-toggle-button {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    padding: 8px 12px;
+    background-color: var(--button-bg);
+    color: var(--button-text);
+    border: 1px solid var(--label-border);
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9em;
+    z-index: 1000;
+     transition: background-color 0.3s, color 0.3s;
+}
+ #theme-toggle-button:hover {
+     opacity: 0.8;
+ }
+
+
+#quiz-container {
+    max-width: 900px;
+    margin: 80px auto 30px auto;
+    background: var(--container-bg);
+    padding: 25px 35px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    border: 1px solid var(--border-color);
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.question-block {
+    margin-bottom: 35px;
+    padding-bottom: 25px;
+    border-bottom: 1px solid var(--separator-color);
+    transition: border-color 0.3s;
+}
+
+.question-block:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 5px;
+}
+
+.learning-objective {
+    font-size: 0.85em;
+    font-style: italic;
+    color: var(--lo-text-color);
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px dashed var(--separator-color);
+}
+
+.question-text {
+    font-weight: 600;
+    font-size: 1.1em;
+    margin-bottom: 18px;
+    color: var(--question-text-color);
+    transition: color 0.3s;
+}
+
+.options label {
+    display: block;
+    margin-bottom: 12px;
+    cursor: pointer;
+    padding: 10px 15px;
+    border-radius: 6px;
+    border: 1px solid var(--label-border);
+    background-color: var(--label-bg);
+    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+}
+
+.options label:hover {
+    background-color: var(--label-hover-bg);
+    border-color: var(--label-hover-border);
+}
+
+.options input[type="radio"]:checked+span {
+     font-weight: bold;
+     color: var(--question-text-color);
+}
+.options input[type="radio"] {
+    margin-right: 12px;
+    accent-color: var(--radio-accent);
+}
+
+.button-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.check-button {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.95em;
+    transition: background-color 0.2s, color 0.2s, opacity 0.2s;
+    background-color: var(--button-bg);
+    color: var(--button-text);
+}
+
+.check-button:hover {
+    opacity: 0.85;
+}
+
+ .check-button:disabled {
+     background-color: var(--button-disabled-bg);
+     cursor: not-allowed;
+     opacity: 0.7;
+ }
+
+.feedback {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 6px;
+    font-size: 0.95em;
+    display: none;
+    border: 1px solid transparent;
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+.feedback.correct {
+    background-color: var(--feedback-correct-bg);
+    color: var(--feedback-correct-text);
+    border-color: var(--feedback-correct-border);
+    display: block;
+}
+
+.feedback.incorrect {
+    background-color: var(--feedback-incorrect-bg);
+    color: var(--feedback-incorrect-text);
+    border-color: var(--feedback-incorrect-border);
+    display: block;
+}
+
+.feedback-status {
+     font-weight: bold;
+     font-size: 1.1em;
+     display: block;
+     margin-bottom: 8px;
+}
+
+.feedback-rationale {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--feedback-separator);
+    font-size: 0.9em;
+    color: var(--feedback-rationale-text);
+    transition: color 0.3s, border-color 0.3s;
+}
+
+.feedback-source {
+    margin-top: 10px;
+    font-size: 0.85em;
+    font-style: italic;
+    color: var(--feedback-source-text);
+    background-color: rgba(0,0,0,0.1);
+    padding: 8px;
+    border-radius: 4px;
+}
+
+h1 {
+    text-align: center;
+    color: var(--question-text-color);
+    margin-top: 30px;
+    margin-bottom: 30px;
+    font-weight: 600;
+    transition: color 0.3s;
+}
+
+</style>
+</head>
+<body>
+
+<button id="theme-toggle-button">Toggle Theme</button>
+<h1>Week 7 Wednesday & Thursday Practice Quiz</h1>
+
+<div id="quiz-container">
+    <!-- Questions will be loaded here by JavaScript -->
+</div>
+
+<script>
+    const quizData = [
+    {
+        learningObjective: "LO 1 (Viral Structure & Pathogenesis): Describe clinically relevant aspects of viral morphology.",
+        question: "A virologist is studying a virus that is easily inactivated by detergents and stomach acid. It is primarily transmitted via respiratory droplets and other body fluids. Based on these characteristics, what is the most likely morphology of this virus?",
+        options: {
+            A: "Naked, icosahedral",
+            B: "Enveloped, helical",
+            C: "Complex, non-enveloped",
+            D: "Naked, filamentous"
+        },
+        correctAnswer: "B",
+        rationale: "The fragility of the virus (sensitivity to acid, detergents, drying) is a hallmark characteristic of an enveloped virus. The lipid envelope is easily disrupted, leading to inactivation. Naked (non-enveloped) viruses are typically much more stable and resistant to these conditions and are often transmitted via the fecal-oral route.",
+        source: "'Enveloped viruses are: Fragile: Sensitive to acid, detergents, drying & heat... Usually transmitted via body fluids. Not transmitted by fecal/oral route.' (Viral Structure & Pathogenesis, Slide 5)"
+    },
+    {
+        learningObjective: "LO 1 (Viral Structure & Pathogenesis): Describe clinically relevant aspects of viral morphology.",
+        question: "The envelope of the Human Immunodeficiency Virus (HIV) is acquired during which stage of its life cycle and is derived from what source?",
+        options: {
+            A: "During entry, from the endosomal membrane",
+            B: "During replication, synthesized de novo in the nucleus",
+            C: "During release, from the host cell plasma membrane",
+            D: "During assembly, from the Golgi apparatus"
+        },
+        correctAnswer: "C",
+        rationale: "Enveloped viruses acquire their lipid bilayer envelope from a host cell membrane. For many viruses, including HIV, this occurs during the final stage of release from the cell, in a process called budding, where the newly assembled virion pushes through and acquires a portion of the host's outer cell membrane.",
+        source: "'A portion of host cell membrane. Acquired from host cell during viral replication or release.' (Viral Structure & Pathogenesis, Slide 4)"
+    },
+    {
+        learningObjective: "LO 1 (Viral Structure & Pathogenesis): Describe clinically relevant aspects of viral morphology.",
+        question: "The glycoprotein (GP) spikes found on the surface of an enveloped virus play a critical role in the initial stages of infection. What is their primary function?",
+        options: {
+            A: "Replicating the viral genome",
+            B: "Providing structural integrity to the capsid",
+            C: "Binding to specific receptors on the host cell",
+            D: "Digesting the host cell wall"
+        },
+        correctAnswer: "C",
+        rationale: "The protein/glycoprotein spikes on the viral envelope function as viral attachment proteins (VAPs). They are essential for recognizing and binding to specific surface receptors on the target host cell, which is the first and most critical step in initiating an infection.",
+        source: "'P/GP spikes play key roles in binding to host cells.' (Viral Structure & Pathogenesis, Slide 4)"
+    },
+    {
+        learningObjective: "LO 2 (Viral Structure & Pathogenesis): Identify basic steps in the viral replication cycle targeted by antiviral drugs.",
+        question: "Amantadine is an older antiviral drug used for influenza. It targets the M2 protein, which is an ion channel. By blocking this channel, amantadine interferes with which step of the influenza virus life cycle?",
+        options: {
+            A: "Attachment",
+            B: "Uncoating",
+            C: "Transcription",
+            D: "Release"
+        },
+        correctAnswer: "B",
+        rationale: "The M2 protein of the influenza virus allows protons to enter the virion after it has been taken into an endosome. This acidification is necessary to disrupt the viral core and release the viral genome into the cytoplasm. Amantadine blocks this M2 channel, trapping the virus in the endosome and preventing the uncoating step.",
+        source: "'General Scheme of Viral Replication' diagram shows Amantadine acting at step 4, 'Uncoating'. (Viral Structure & Pathogenesis, Slide 7)"
+    },
+    {
+        learningObjective: "LO 2 (Viral Structure & Pathogenesis): Identify basic steps in the viral replication cycle targeted by antiviral drugs.",
+        question: "Zidovudine (AZT) was one of the first successful antiviral drugs for HIV. It is a nucleoside analogue that, once incorporated into the growing viral DNA strand, prevents further elongation. Which stage of the viral life cycle does this drug inhibit?",
+        options: {
+            A: "Entry",
+            B: "Uncoating",
+            C: "Replication (Reverse Transcription)",
+            D: "Assembly/Maturation"
+        },
+        correctAnswer: "C",
+        rationale: "AZT targets the reverse transcriptase enzyme. As a thymidine analogue, it gets incorporated into the DNA chain being synthesized from the viral RNA template. Its structure prevents the addition of subsequent nucleotides, thus terminating DNA synthesis. This falls under the general stage of Replication.",
+        source: "'General Scheme of Viral Replication' diagram shows 'Nucleotide analogs' acting at step 7, 'Replication'. (Viral Structure & Pathogenesis, Slide 7)"
+    },
+    {
+        learningObjective: "LO 2 (Viral Structure & Pathogenesis): Identify basic steps in the viral replication cycle targeted by antiviral drugs.",
+        question: "Protease inhibitors are a potent class of antiretroviral drugs used to treat HIV. They function by preventing the cleavage of large viral polyproteins into smaller, functional proteins. This action disrupts which final stage of the viral life cycle?",
+        options: {
+            A: "Attachment to host cell",
+            B: "Membrane fusion",
+            C: "Integration into host DNA",
+            D: "Assembly and Maturation"
+        },
+        correctAnswer: "D",
+        rationale: "After initial assembly of viral components, the viral protease enzyme is required to process the Gag-Pol polyprotein into mature structural proteins and enzymes. Protease inhibitors block this crucial maturation step, resulting in the release of immature, non-infectious virions.",
+        source: "'General Scheme of Viral Replication' diagram shows 'Protease inhibitors' acting at step 8, 'Assembly'. (Viral Structure & Pathogenesis, Slide 7)"
+    },
+    {
+        learningObjective: "LO 3 (Viral Structure & Pathogenesis): Compare and contrast replication of DNA and RNA viruses and apply it to pathology of relevant diseases.",
+        question: "A patient is diagnosed with an infection caused by a poxvirus. Unlike most other DNA viruses, where does the replication of the poxvirus genome occur?",
+        options: {
+            A: "In the host cell nucleus",
+            B: "In the host cell cytoplasm",
+            C: "Within the mitochondrion",
+            D: "On the surface of the host cell membrane"
+        },
+        correctAnswer: "B",
+        rationale: "The vast majority of DNA viruses replicate in the host cell nucleus, where they can utilize the host's DNA replication machinery. Poxviruses are a major exception to this rule; they are large, complex DNA viruses that carry their own replication machinery and replicate entirely within the cytoplasm.",
+        source: "'Replication of DNA Viruses: Replication site is the Nucleus of host cell: – Exceptions: poxvirus and hepatitis B virus (HBV) replicate in the cytoplasm.' (Viral Structure & Pathogenesis, Slide 11)"
+    },
+    {
+        learningObjective: "LO 3 (Viral Structure & Pathogenesis): Compare and contrast replication of DNA and RNA viruses and apply it to pathology of relevant diseases.",
+        question: "Hepatitis B virus (HBV) has a double-stranded DNA genome but has a unique replication strategy that is a target for antiviral therapy. Which enzyme, typically associated with retroviruses, is essential for the HBV replication cycle?",
+        options: {
+            A: "RNA-dependent RNA polymerase",
+            B: "DNA gyrase",
+            C: "Reverse transcriptase",
+            D: "Neuraminidase"
+        },
+        correctAnswer: "C",
+        rationale: "HBV is a hepadnavirus, a DNA virus that uniquely uses an RNA intermediate and the enzyme reverse transcriptase to replicate its genome. This is why drugs like lamivudine, which inhibit reverse transcriptase, are effective against both HIV and HBV.",
+        source: "'HBV uses an RNA intermediate to be copied back to DNA. Copying of RNA to DNA, as in retroviruses (e.g., HIV), is a function of RNA-dependent DNA polymerase = Reverse Transcriptase.' (Viral Structure & Pathogenesis, Slide 11)"
+    },
+    {
+        learningObjective: "LO 3 (Viral Structure & Pathogenesis): Compare and contrast replication of DNA and RNA viruses and apply it to pathology of relevant diseases.",
+        question: "Most RNA viruses must encode their own RNA-dependent RNA polymerase. Why is this enzyme essential for these viruses but not for DNA viruses?",
+        options: {
+            A: "Host cells lack enzymes that can replicate RNA from an RNA template.",
+            B: "This enzyme is required for the virus to enter the host cell nucleus.",
+            C: "The enzyme helps the virus evade the host immune system.",
+            D: "DNA viruses use the host's RNA polymerase for replication."
+        },
+        correctAnswer: "A",
+        rationale: "Host cells possess DNA-dependent DNA polymerases (for DNA replication) and DNA-dependent RNA polymerases (for transcription), but they do not have enzymes capable of making RNA copies from an RNA template. Therefore, RNA viruses (except retroviruses) must provide their own RNA-dependent RNA polymerase to replicate their genomes.",
+        source: "'RNA viruses use viral RNA-dependent RNA polymerase b/c cells have no means of replicating RNA.' (Viral Structure & Pathogenesis, Slide 12)"
+    },
+    {
+        learningObjective: "LO 4 (Viral Structure & Pathogenesis): Recognize medically important DNA and RNA viruses, including the causative agent of COVID-19.",
+        question: "A patient presents with genital warts (condylomata acuminata). This condition is most commonly caused by which of the following medically important DNA viruses?",
+        options: {
+            A: "Herpes Simplex Virus (HSV)",
+            B: "Hepatitis B Virus (HBV)",
+            C: "Human Papilloma Virus (HPV)",
+            D: "Poxvirus"
+        },
+        correctAnswer: "C",
+        rationale: "Human Papilloma Virus (HPV) is a DNA virus that infects epithelial cells. While high-risk types are associated with cancer, low-risk types, particularly HPV 6 and 11, are the causative agents of benign anogenital warts.",
+        source: "'Human Papilloma Virus (HPV): – HPV 6, 11: Genital warts.' (Viral Structure & Pathogenesis, Slide 17)"
+    },
+    {
+        learningObjective: "LO 4 (Viral Structure & Pathogenesis): Recognize medically important DNA and RNA viruses, including the causative agent of COVID-19.",
+        question: "A global pandemic that began in late 2019 was caused by a novel coronavirus. This virus, known as SARS-CoV-2, belongs to which major group of viruses?",
+        options: {
+            A: "DNA Viruses",
+            B: "RNA Viruses",
+            C: "Retroviruses",
+            D: "Prions"
+        },
+        correctAnswer: "B",
+        rationale: "Coronaviridae, the family that includes SARS-CoV-2, are RNA viruses. Specifically, they are enveloped, positive-strand RNA viruses. Knowing the fundamental classification of major pathogens is critical.",
+        source: "'RNA Viruses: ... Coronaviridae: SARS-CoV-19.' (Viral Structure & Pathogenesis, Slide 16)"
+    },
+    {
+        learningObjective: "LO 4 (Viral Structure & Pathogenesis): Recognize medically important DNA and RNA viruses, including the causative agent of COVID-19.",
+        question: "An influenza A pandemic, such as the one in 2009, is caused by a major change in the viral antigens, allowing it to infect a naive population. This phenomenon, known as antigenic shift, is possible because influenza virus has which unique genomic property?",
+        options: {
+            A: "It is a DNA virus.",
+            B: "It has a circular genome.",
+            C: "It has a segmented genome.",
+            D: "It integrates into the host chromosome."
+        },
+        correctAnswer: "C",
+        rationale: "Influenza A virus has a genome consisting of 8 separate RNA segments. If a single host cell is co-infected with two different strains (e.g., an avian and a human strain), these segments can be reassorted during the assembly of new virions. This genetic reassortment can create a novel pandemic strain.",
+        source: "'Orthomyxoviruses (e.g., Influenza virus.): ... The genome consists of 8 segments... Antigenic shift due to Reassortment -> Pandemic.' (Viral Structure & Pathogenesis, Slide 18)"
+    },
+    {
+        learningObjective: "LO 5 (Viral Structure & Pathogenesis): Describe modes of transmission of viral infections.",
+        question: "The presence of a virus circulating in the bloodstream, which allows it to spread from the initial site of infection to secondary sites like the liver or skin, is known as:",
+        options: {
+            A: "Incubation",
+            B: "Prodrome",
+            C: "Contagion",
+            D: "Viremia"
+        },
+        correctAnswer: "D",
+        rationale: "Viremia is the medical term for the presence of viruses in the blood. It is a critical step in the pathogenesis of many systemic viral diseases, as it facilitates the spread (dissemination) of the virus throughout the body.",
+        source: "'Viral Spread via bloodstream and lymphatic system. Presence of virus in the blood is called Viremia.' (Viral Structure & Pathogenesis, Slide 20)"
+    },
+    {
+        learningObjective: "LO 5 (Viral Structure & Pathogenesis): Describe modes of transmission of viral infections.",
+        question: "Which of the following characteristics explains why viruses like Norovirus and Hepatitis A are efficiently transmitted via the fecal-oral route through contaminated food or water?",
+        options: {
+            A: "They are large DNA viruses.",
+            B: "They are enveloped and thus protected from the environment.",
+            C: "They are naked (non-enveloped) and resistant to stomach acid.",
+            D: "They are transmitted by insect vectors."
+        },
+        correctAnswer: "C",
+        rationale: "Viruses transmitted by the fecal-oral route must be able to survive the harsh environment of the gastrointestinal tract, including stomach acid and bile. Naked, non-enveloped viruses are structurally stable and resistant to these conditions, allowing them to remain infectious and be transmitted this way.",
+        source: "'Naked viruses are: Stable: Resistant to acid, detergents, drying & heat. Resistant to stomach acid and bile in the GI tract. Readily transmitted by fecal/oral route.' (Viral Structure & Pathogenesis, Slide 5)"
+    },
+    {
+        learningObjective: "LO 5 (Viral Structure & Pathogenesis): Describe modes of transmission of viral infections.",
+        question: "During a viral infection, the period between the initial acquisition of the virus and the onset of specific clinical manifestations, during which the virus is amplifying and spreading, is known as the:",
+        options: {
+            A: "Prodromal Period",
+            B: "Incubation Period",
+            C: "Convalescence",
+            D: "Contagion Period"
+        },
+        correctAnswer: "B",
+        rationale: "The incubation period is the time from initial exposure to an infectious agent until the appearance of the first signs or symptoms. During this time, the virus is replicating and spreading to secondary sites, but the characteristic disease manifestations have not yet developed.",
+        source: "'Incubation Period: Virus amplified -> spread to 2° site.' (Viral Structure & Pathogenesis, Slide 21)"
+    },
+    {
+        learningObjective: "LO 6 (Viral Structure & Pathogenesis): Discuss the cellular and host immune responses to viral infections.",
+        question: "A patient with influenza experiences fever, chills, and body aches. These nonspecific, systemic 'flu-like' symptoms are not caused directly by viral destruction of cells but rather by the host's production of which substances?",
+        options: {
+            A: "Viral attachment proteins",
+            B: "Histamine and leukotrienes",
+            C: "Interferon and cytokines",
+            D: "Antibodies"
+        },
+        correctAnswer: "C",
+        rationale: "The host's innate immune response to a viral infection involves the production of interferons and other pro-inflammatory cytokines (like IL-1, TNF-alpha). These signaling molecules are responsible for the systemic, nonspecific symptoms of the prodromal period, such as fever, malaise, and myalgias.",
+        source: "'Influenza virus: Flu-like symptoms due to interferon & cytokine production.' (Viral Structure & Pathogenesis, Slide 31)"
+    },
+    {
+        learningObjective: "LO 6 (Viral Structure & Pathogenesis): Discuss the cellular and host immune responses to viral infections.",
+        question: "Infections with Hepatitis B Virus (HBV) can lead to significant liver damage. This tissue damage is primarily caused by which of the following mechanisms?",
+        options: {
+            A: "Direct cytopathic effect of the virus on hepatocytes",
+            B: "An immune complex-mediated (Type III) hypersensitivity reaction",
+            C: "Formation of multinucleated giant cells",
+            D: "Antibody-dependent cellular cytotoxicity"
+        },
+        correctAnswer: "B",
+        rationale: "The liver damage in chronic HBV (and HCV) infection is not primarily due to the virus directly killing the cells. Instead, it is an immunopathologic process. The host's immune response to the viral antigens leads to the formation of immune complexes that deposit in the liver (and other sites), causing a Type III hypersensitivity reaction and chronic inflammation.",
+        source: "'HBV & HBC: Immune complex, type III hypersensitivity.' (Viral Structure & Pathogenesis, Slide 31)"
+    },
+    {
+        learningObjective: "LO 6 (Viral Structure & Pathogenesis): Discuss the cellular and host immune responses to viral infections.",
+        question: "The host immune response is critical for controlling viral infections but can also contribute to tissue damage. This contribution to disease pathology is referred to as:",
+        options: {
+            A: "Viremia",
+            B: "Immunopathogenesis",
+            C: "Tropism",
+            D: "Latency"
+        },
+        correctAnswer: "B",
+        rationale: "Immunopathogenesis is the process by which the host's own immune response to an infection causes tissue damage and contributes to the signs and symptoms of the disease. This is a key concept in understanding diseases like viral hepatitis and measles.",
+        source: "'Host immune response: – Contributes to immunopathogenesis.' (Viral Structure & Pathogenesis, Slide 21)"
+    },
+    {
+        learningObjective: "LO 7 (Viral Structure & Pathogenesis): Relate laboratory diagnosis of viral infections to virus structure and its interactions with host cells.",
+        question: "Epstein-Barr Virus (EBV) infects B lymphocytes by binding to a specific receptor on their surface. What is this receptor?",
+        options: {
+            A: "CD4",
+            B: "ACE2",
+            C: "CR2 (CD21)",
+            D: "Globoside"
+        },
+        correctAnswer: "C",
+        rationale: "Viral tropism is determined by the interaction between a viral attachment protein and a host cell receptor. EBV specifically targets B cells because its viral attachment protein binds to the CR2 receptor (also known as CD21), which is part of the B-cell co-receptor complex.",
+        source: "'EBV binds to CR2 on human B cells.' (Viral Structure & Pathogenesis, Slide 8)"
+    },
+    {
+        learningObjective: "LO 7 (Viral Structure & Pathogenesis): Relate laboratory diagnosis of viral infections to virus structure and its interactions with host cells.",
+        question: "The most sensitive method for detecting the presence of a viral genome (DNA or RNA) in a patient sample, such as CSF or blood, is which of the following laboratory techniques?",
+        options: {
+            A: "Viral culture",
+            B: "Tzanck smear",
+            C: "Serology for IgM antibodies",
+            D: "Polymerase Chain Reaction (PCR)"
+        },
+        correctAnswer: "D",
+        rationale: "PCR is a nucleic acid amplification technique that can detect very small quantities of viral genetic material (DNA or RNA, after a reverse transcription step for the latter). It is the gold standard for diagnosing many viral infections, especially those involving the CNS (like HSV encephalitis) or when rapid, sensitive detection is needed.",
+        source: "'Nucleic acid detection (PCR): identification of virus in blood, CSF and other body fluids.' (Herpesvirus Infections, Slide 10)"
+    },
+    {
+        learningObjective: "LO 7 (Viral Structure & Pathogenesis): Relate laboratory diagnosis of viral infections to virus structure and its interactions with host cells.",
+        question: "A patient is tested for a past infection with a specific virus. The presence of which class of antibody in the serum would indicate prior exposure and immunity, but not necessarily an acute infection?",
+        options: {
+            A: "IgG",
+            B: "IgM",
+            C: "IgA",
+            D: "IgE"
+        },
+        correctAnswer: "A",
+        rationale: "Serology is used to detect the host's antibody response to a virus. IgM is the first antibody produced and indicates an acute or recent infection. IgG is produced later and persists for a long time, often for life. The presence of virus-specific IgG indicates a past infection or vaccination and typically confers immunity.",
+        source: "'Serology – IgM (acute infection); IgG prior exposure based on Ab to gpG.' (Herpesvirus Infections, Slide 10)"
+    },
+    {
+        learningObjective: "LO 8 (Viral Structure & Pathogenesis): Recognize histopathological hallmarks of CMV, EBV, HSV, HPV, Rabies virus, Parvovirus B19, and RSV infections.",
+        question: "A brain biopsy from an animal suspected of having rabies is examined. The pathognomonic finding for this infection is the presence of eosinophilic, intracytoplasmic inclusions within pyramidal neurons. What are these inclusions called?",
+        options: {
+            A: "Owl's eye inclusions",
+            B: "Cowdry bodies",
+            C: "Koilocytes",
+            D: "Negri bodies"
+        },
+        correctAnswer: "D",
+        rationale: "Negri bodies are the specific, pathognomonic histopathological hallmark of rabies virus infection. They are eosinophilic inclusions found in the cytoplasm of infected neurons, particularly in the hippocampus (Ammon's horn) and cerebellar Purkinje cells.",
+        source: "'Negri bodies (eosinophilic intracytoplasmic inclusions in infected pyramidal cells, Ammon's horn): Rabies virus.' (Viral Structure & Pathogenesis, Slide 24)"
+    },
+    {
+        learningObjective: "LO 8 (Viral Structure & Pathogenesis): Recognize histopathological hallmarks of CMV, EBV, HSV, HPV, Rabies virus, Parvovirus B19, and RSV infections.",
+        question: "A patient with herpes simplex encephalitis dies, and an autopsy of the brain is performed. Microscopic examination of the temporal lobe reveals eosinophilic nuclear inclusions in neurons, with margination of the chromatin against the nuclear membrane. What are these inclusions called?",
+        options: {
+            A: "Negri bodies",
+            B: "Koilocytes",
+            C: "Cowdry bodies",
+            D: "Owl's eye inclusions"
+        },
+        correctAnswer: "C",
+        rationale: "Cowdry type A bodies are eosinophilic intranuclear inclusions with surrounding halos and margination of chromatin. They are the characteristic histopathological finding in cells infected with Herpes Simplex Virus (HSV) and Varicella-Zoster Virus (VZV).",
+        source: "'Cowdry bodies (eosinophilic nuclear inclusions, with margination of chromatin): HSV, VZV.' (Viral Structure & Pathogenesis, Slide 24)"
+    },
+    {
+        learningObjective: "LO 8 (Viral Structure & Pathogenesis): Recognize histopathological hallmarks of CMV, EBV, HSV, HPV, Rabies virus, Parvovirus B19, and RSV infections.",
+        question: "A bone marrow biopsy from a fetus with hydrops fetalis shows viral infection of red blood cell precursors. The characteristic finding in the infected cells is margination of the chromatin against the nuclear membrane, but without a prominent eosinophilic inclusion body. This finding is characteristic of which virus?",
+        options: {
+            A: "Cytomegalovirus (CMV)",
+            B: "Epstein-Barr Virus (EBV)",
+            C: "Parvovirus B19",
+            D: "Respiratory Syncytial Virus (RSV)"
+        },
+        correctAnswer: "C",
+        rationale: "Parvovirus B19 infects proerythroblasts (red cell precursors). The key histopathological finding is chromatin margination within the nucleus of these cells. This is distinct from the inclusions seen in HSV or CMV.",
+        source: "'Margination of chromatin: Parvovirus B19.' (Viral Structure & Pathogenesis, Slide 24)"
+    },
+    {
+        learningObjective: "LO 1 (Oncogenic Viruses): Describe the general characteristics of oncogenic viruses.",
+        question: "Viruses can cause cancer through several mechanisms. Which of the following describes a mechanism by which a virus can interfere with the normal 'brakes' of the cell cycle?",
+        options: {
+            A: "Stimulating oncogenes already present in the genome",
+            B: "Interfering with tumor suppressor genes",
+            C: "Inserting into host DNA to convert a proto-oncogene to an oncogene",
+            D: "Causing persistent inflammation leading to cell turnover"
+        },
+        correctAnswer: "B",
+        rationale: "Tumor suppressor genes, like p53 and RB, act as the 'brakes' that keep cell division in check. Some oncogenic viruses produce proteins that specifically bind to and inactivate these tumor suppressor proteins, thereby removing the brakes and allowing for uncontrolled cell proliferation.",
+        source: "'Some interfere with tumor suppressor genes upon insertion into host DNA.' (Oncogenic Viruses, Slide 4) and 'Tumor suppressor genes keep cell division in check: they’re the “brakes” of the cell.' (Oncogenic Viruses, Slide 5)"
+    },
+    {
+        learningObjective: "LO 1 (Oncogenic Viruses): Describe the general characteristics of oncogenic viruses.",
+        question: "Which two major families of viruses contain members that are known to be oncogenic?",
+        options: {
+            A: "Picornaviruses and Caliciviruses",
+            B: "DNA viruses and Retroviruses",
+            C: "Paramyxoviruses and Orthomyxoviruses",
+            D: "Flaviviruses and Togaviruses"
+        },
+        correctAnswer: "B",
+        rationale: "Oncogenic potential is not found in all virus families. The capacity to cause cancer is primarily seen in certain DNA viruses (like Herpesviruses, Papillomaviruses, Hepadnaviruses) and the Retroviruses (like HTLV-1), which can integrate their genetic material into the host genome.",
+        source: "'Some DNA-viruses and retroviruses are oncogenic.' (Oncogenic Viruses, Slide 4)"
+    },
+    {
+        learningObjective: "LO 1 (Oncogenic Viruses): Describe the general characteristics of oncogenic viruses.",
+        question: "The integration of a retroviral genome into the host chromosome results in a state where the viral DNA is a permanent part of the host cell's genetic material. What is this integrated viral genome called?",
+        options: {
+            A: "Virion",
+            B: "Oncogene",
+            C: "Provirus",
+            D: "Episome"
+        },
+        correctAnswer: "C",
+        rationale: "A provirus is the term for a viral genome that has been integrated into the DNA of a host cell. This is the mechanism by which retroviruses establish a permanent, latent infection that can lead to oncogenesis.",
+        source: "'Provirus – viral genome integrated into the host chromosome.' (Oncogenic Viruses, Slide 3)"
+    },
+    {
+        learningObjective: "LO 2 (Oncogenic Viruses): Explain the mechanisms of oncogenesis mediated by viruses.",
+        question: "Burkitt Lymphoma is strongly associated with EBV, but the virus is not considered directly oncogenic. Instead, EBV acts as a polyclonal B-cell mitogen, which increases the likelihood of a critical secondary event. What is this critical genetic event?",
+        options: {
+            A: "Inactivation of the p53 gene",
+            B: "A chromosomal translocation involving the myc oncogene",
+            C: "Integration of the EBV genome next to an oncogene",
+            D: "A point mutation in the RB gene"
+        },
+        correctAnswer: "B",
+        rationale: "While EBV immortalizes B cells and drives their proliferation, the final step in transformation to Burkitt Lymphoma is a chromosomal translocation, most commonly t(8;14), which places the potent c-myc proto-oncogene under the control of a highly active immunoglobulin gene promoter, leading to its massive overexpression.",
+        source: "'EBV acts as a polyclonal B-cell mitogen to set the stage for 8;14 translocation and other mutations that ultimately produce cancer.' (Oncogenic Viruses, Slide 14)"
+    },
+    {
+        learningObjective: "LO 2 (Oncogenic Viruses): Explain the mechanisms of oncogenesis mediated by viruses.",
+        question: "Human Herpes Virus 8 (HHV-8) is a 'molecular pirate' that has incorporated several human genes into its genome to promote cell survival and proliferation. Which HHV-8-encoded protein functions to inhibit the RB tumor suppressor protein?",
+        options: {
+            A: "BCL2",
+            B: "vFLIP",
+            C: "Latency-associated nuclear antigen-1 (LANA-1)",
+            D: "Viral IL-6"
+        },
+        correctAnswer: "C",
+        rationale: "HHV-8 employs multiple strategies to dysregulate the cell cycle. Its Latency-associated nuclear antigen-1 (LANA-1) protein directly interacts with and inhibits the function of the RB tumor suppressor protein, which helps to push the cell into uncontrolled proliferation.",
+        source: "'Latency-associated nuclear antigen-1 (LANA-1) cyclin – Inhibits RB protein.' (Oncogenic Viruses, Slide 28)"
+    },
+    {
+        learningObjective: "LO 2 (Oncogenic Viruses): Explain the mechanisms of oncogenesis mediated by viruses.",
+        question: "How does the oncogenesis of benign warts caused by HPV differ from the oncogenesis of cervical cancer caused by high-risk HPV?",
+        options: {
+            A: "In warts, the viral DNA is integrated, while in cancer it is episomal.",
+            B: "In warts, the viral DNA is maintained as a nonintegrated episome, while in cancer it integrates into the host genome.",
+            C: "Warts are caused by inactivation of p53, while cancer is caused by inactivation of RB.",
+            D: "There is no difference in the molecular mechanism."
+        },
+        correctAnswer: "B",
+        rationale: "A key difference between benign and malignant HPV-associated lesions is the state of the viral DNA. In benign warts, the viral DNA exists as a separate circular plasmid (an episome). In cancers, the viral DNA typically integrates into the host chromosome, which often leads to dysregulated, high-level expression of the E6 and E7 oncoproteins.",
+        source: "'Benign warts: Viral DNA maintained in a nonintegrated episomal form. Oncogenesis in Cancers: Viral DNA integrated in the host genome -> malignant transformation.' (Oncogenic Viruses, Slide 20)"
+    },
+    {
+        learningObjective: "LO 3 (Oncogenic Viruses): Discuss the spectrum of diseases caused by the following oncogenic viruses.",
+        question: "Infectious mononucleosis is the most common clinical manifestation of a primary infection with which of the following viruses in adolescents?",
+        options: {
+            A: "Human Papilloma Virus (HPV)",
+            B: "Human Herpes Virus 8 (HHV-8)",
+            C: "Hepatitis B Virus (HBV)",
+            D: "Epstein-Barr Virus (EBV)"
+        },
+        correctAnswer: "D",
+        rationale: "While primary EBV infection is often asymptomatic in young children, late infection in adolescents and young adults frequently presents as infectious mononucleosis, characterized by fever, fatigue, pharyngitis, and lymphadenopathy.",
+        source: "'Late infection in college-age persons usually apparent: Infectious mononucleosis.' (Oncogenic Viruses, Slide 8)"
+    },
+    {
+        learningObjective: "LO 3 (Oncogenic Viruses): Discuss the spectrum of diseases caused by the following oncogenic viruses.",
+        question: "Condylomata acuminata, or anogenital warts, are cauliflower-like lesions caused by which specific types of Human Papilloma Virus?",
+        options: {
+            A: "HPV 1 and 4",
+            B: "HPV 6 and 11",
+            C: "HPV 16 and 18",
+            D: "HPV 31 and 33"
+        },
+        correctAnswer: "B",
+        rationale: "HPV types are classified as low-risk or high-risk based on their association with cancer. HPV types 6 and 11 are the primary low-risk types responsible for causing benign anogenital warts (condylomata acuminata).",
+        source: "'Low-Risk Types HPV 6,11 -> Anogenital Warts: Condylomata acuminata (cauliflower-like lesions).' (Oncogenic Viruses, Slide 21)"
+    },
+    {
+        learningObjective: "LO 3 (Oncogenic Viruses): Discuss the spectrum of diseases caused by the following oncogenic viruses.",
+        question: "Besides Kaposi Sarcoma, Human Herpes Virus 8 (HHV-8) is also associated with which other rare lymphoproliferative disorder seen in HIV-infected patients?",
+        options: {
+            A: "Burkitt Lymphoma",
+            B: "Hodgkin Lymphoma",
+            C: "Primary Effusion Lymphoma (PEL)",
+            D: "Hairy Leukoplakia"
+        },
+        correctAnswer: "C",
+        rationale: "HHV-8 is the causative agent of three recognized malignancies: Kaposi Sarcoma, Primary Effusion Lymphoma (a rare B-cell lymphoma that grows in body cavities), and Multicentric Castleman Disease.",
+        source: "'Primary Effusion Lymphoma (PEL): rare lymphoma seen in HIV involving body cavities.' (Herpesvirus Infections, Slide 54)"
+    },
+    {
+        learningObjective: "LO 4 (Oncogenic Viruses): Describe the treatment and prevention of oncogenic viral infections.",
+        question: "A 16-year-old female with infectious mononucleosis presents with severe pharyngitis and impending airway obstruction. In addition to supportive care, which treatment may be useful for this specific complication?",
+        options: {
+            A: "High-dose acyclovir",
+            B: "Radiation therapy",
+            C: "Corticosteroids",
+            D: "No specific therapy is ever beneficial"
+        },
+        correctAnswer: "C",
+        rationale: "While specific antiviral therapy is generally not beneficial for routine infectious mononucleosis, corticosteroids may be used for certain severe complications, such as impending airway obstruction (due to massive tonsillar swelling), severe thrombocytopenia, or hemolytic anemia.",
+        source: "'Steroids may be useful for complications: ... Impending airway obstruction...' (Herpesvirus Infections, Slide 41)"
+    },
+    {
+        learningObjective: "LO 4 (Oncogenic Viruses): Describe the treatment and prevention of oncogenic viral infections.",
+        question: "A patient with AIDS-related Kaposi Sarcoma has limited disease confined to the skin with minimal oral involvement (Stage T0). What is the recommended initial treatment?",
+        options: {
+            A: "Radiation therapy",
+            B: "Antiretrovirals alone",
+            C: "Liposomal doxorubicin",
+            D: "Interferon-alpha"
+        },
+        correctAnswer: "B",
+        rationale: "For early-stage, low-risk (T0) Kaposi Sarcoma in the setting of HIV, the first and most important step is to start effective antiretroviral therapy (ART). Restoring immune function with ART often leads to the regression of KS lesions without the need for specific chemotherapy.",
+        source: "'Stage T0: Antiretrovirals alone.' (HIV and Common Opportunistic Infections, Slide 37)"
+    },
+    {
+        learningObjective: "LO 4 (Oncogenic Viruses): Describe the treatment and prevention of oncogenic viral infections.",
+        question: "What is the primary method for diagnosing infectious mononucleosis caused by EBV in an adolescent?",
+        options: {
+            A: "Peripheral blood smear showing atypical lymphocytes and a Monospot test",
+            B: "PCR for EBV DNA on a blood specimen",
+            C: "Biopsy of a lymph node",
+            D: "Viral culture of saliva"
+        },
+        correctAnswer: "A",
+        rationale: "The diagnosis of classic infectious mononucleosis is typically made based on the clinical presentation combined with key laboratory findings: lymphocytosis with >10% atypical lymphocytes on a peripheral smear, and a positive heterophile antibody test (Monospot).",
+        source: "'LABORATORY DIAGNOSIS: ... Atypical lymphocytosis(>10%) – T cells (CD8). Positive heterophile Ab – MONOSpot test.' (Herpesvirus Infections, Slide 39)"
+    },
+    {
+        learningObjective: "LO 1 (HIV Anti-Retrovirals): Explain the goals of antiretroviral therapy (ART).",
+        question: "A patient starting ART has a CD4 count of 150 cells/mm³. After one year of successful therapy, her CD4 count increases to 400 cells/mm³. This improvement represents the achievement of which goal of ART?",
+        options: {
+            A: "Virologic Suppression",
+            B: "Immunologic Goal",
+            C: "Clinical Goal",
+            D: "Societal Goal"
+        },
+        correctAnswer: "B",
+        rationale: "The immunologic goal of ART is the reconstitution of the immune system, which is primarily measured by the recovery of the CD4 cell count. A rising CD4 count indicates improved immune function and a reduced risk of opportunistic infections.",
+        source: "'Immunologic: CD4 cell count recovery. Reduced risk of opportunistic infections.' (Antiretroviral Agents, Slide 6)"
+    },
+    {
+        learningObjective: "LO 1 (HIV Anti-Retrovirals): Explain the goals of antiretroviral therapy (ART).",
+        question: "A patient with HIV has been on ART for 6 months and now has an undetectable viral load. The patient asks if they can still transmit the virus to their partner. The principle that an undetectable viral load prevents sexual transmission of HIV is best summarized by which phrase?",
+        options: {
+            A: "Test and Treat",
+            B: "Rapid Initiation",
+            C: "Undetectable = Untransmittable (U=U)",
+            D: "Treatment as Prevention"
+        },
+        correctAnswer: "C",
+        rationale: "U=U is a key public health message and a goal of ART. It means that people with HIV who achieve and maintain an undetectable viral load by taking ART daily as prescribed have effectively no risk of sexually transmitting the virus to an HIV-negative partner. This is a component of achieving virologic suppression.",
+        source: "'Virologic Suppression... U = U.' (Antiretroviral Agents, Slide 6)"
+    },
+    {
+        learningObjective: "LO 1 (HIV Anti-Retrovirals): Explain the goals of antiretroviral therapy (ART).",
+        question: "Which of the following is considered the most important predictor of success in achieving and maintaining long-term virologic suppression with ART?",
+        options: {
+            A: "Low baseline viremia",
+            B: "High potency ART regimen",
+            C: "High levels of adherence",
+            D: "Convenience of the regimen"
+        },
+        correctAnswer: "C",
+        rationale: "While all the listed factors contribute to success, high levels of adherence to the prescribed regimen is the most critical factor. Inconsistent dosing allows the virus to replicate, which can lead to treatment failure and the development of drug resistance.",
+        source: "'Predictors of success: ... High levels of adherence.' (Antiretroviral Agents, Slide 7)"
+    },
+    {
+        learningObjective: "LO 2 (HIV Anti-Retrovirals): Describe the mechanism of action for antiretrovirals.",
+        question: "Efavirenz is an antiretroviral that binds directly to the reverse transcriptase enzyme at a site distinct from the active site, causing a conformational change that inactivates the enzyme. To which class of drugs does efavirenz belong?",
+        options: {
+            A: "Nucleoside Reverse Transcriptase Inhibitors (NRTIs)",
+            B: "Non-Nucleoside Reverse Transcriptase Inhibitors (NNRTIs)",
+            C: "Protease Inhibitors (PIs)",
+            D: "Integrase Strand Transfer Inhibitors (INSTIs)"
+        },
+        correctAnswer: "B",
+        rationale: "NNRTIs are non-competitive inhibitors of reverse transcriptase. They bind to an allosteric site on the enzyme, inducing a change in its shape that renders the catalytic site non-functional. This is distinct from NRTIs, which are competitive inhibitors that act as chain terminators.",
+        source: "'Non-Nucleoside Reverse Transcriptase Inhibitors (NNRTIs).' (Antiretroviral Agents, Slide 11)"
+    },
+    {
+        learningObjective: "LO 2 (HIV Anti-Retrovirals): Describe the mechanism of action for antiretrovirals.",
+        question: "Dolutegravir is a highly effective and well-tolerated antiretroviral. It works by preventing the covalent insertion of HIV DNA into the host cell's genome. Dolutegravir belongs to which drug class?",
+        options: {
+            A: "Protease Inhibitors (PIs)",
+            B: "Integrase Strand Transfer Inhibitors (INSTIs)",
+            C: "CCR5 Antagonists",
+            D: "Nucleoside Reverse Transcriptase Inhibitors (NRTIs)"
+        },
+        correctAnswer: "B",
+        rationale: "Integrase Strand Transfer Inhibitors (INSTIs) target the viral enzyme integrase. This enzyme is responsible for the 'strand transfer' step, where the newly synthesized viral DNA is integrated into the host chromosome. By blocking this step, INSTIs prevent the establishment of a permanent provirus.",
+        source: "'Integrase Strand Transfer Inhibitors (INSTIs): Inhibits insertion of HIV-1 DNA into host genome.' (Antiretroviral Agents, Slide 13)"
+    },
+    {
+        learningObjective: "LO 2 (HIV Anti-Retrovirals): Describe the mechanism of action for antiretrovirals.",
+        question: "Maraviroc is an antiretroviral that does not target a viral enzyme but instead blocks a host cell protein to prevent viral entry. Which specific host protein does Maraviroc antagonize?",
+        options: {
+            A: "CD4 receptor",
+            B: "CXCR4 coreceptor",
+            C: "CCR5 coreceptor",
+            D: "gp120"
+        },
+        correctAnswer: "C",
+        rationale: "Maraviroc is a CCR5 antagonist. It binds to the host cell's CCR5 coreceptor, changing its conformation so that the viral gp120 protein can no longer interact with it. This prevents the entry of CCR5-tropic (M-tropic) HIV strains. A tropism test is required before use to ensure the patient's virus uses this coreceptor.",
+        source: "'Coreceptor (CCR5) Antagonist - Maraviroc... Only works for CCR5 coreceptor binding.' (Antiretroviral Agents, Slide 16)"
+    },
+    {
+        learningObjective: "LO 3 (HIV Anti-Retrovirals): Recognize the most common adverse effects of ART.",
+        question: "A patient taking an older NRTI regimen containing stavudine or zidovudine develops peripheral neuropathy and hepatic steatosis. These toxicities are primarily due to the drug's off-target effect on which cellular organelle?",
+        options: {
+            A: "Nucleus",
+            B: "Ribosome",
+            C: "Mitochondrion",
+            D: "Lysosome"
+        },
+        correctAnswer: "C",
+        rationale: "The older generation of NRTIs (like stavudine and didanosine) had a higher affinity for human mitochondrial DNA polymerase gamma. Inhibition of this enzyme leads to mitochondrial dysfunction, which manifests as toxicities like peripheral neuropathy, myopathy, lactic acidosis, and hepatic steatosis.",
+        source: "'Older NRTI Side Effects: Mitochondrial toxicity, Myopathy, Hepatic steatosis, Lactic acidosis...' (Antiretroviral Agents, Slide 9)"
+    },
+    {
+        learningObjective: "LO 3 (HIV Anti-Retrovirals): Recognize the most common adverse effects of ART.",
+        question: "A patient is about to start a regimen containing abacavir. Which of the following genetic tests must be performed before initiating this drug to screen for the risk of a severe, potentially fatal hypersensitivity reaction?",
+        options: {
+            A: "CYP2D6 genotype",
+            B: "HLA-B*5701 allele",
+            C: "CCR5 tropism assay",
+            D: "G6PD deficiency screen"
+        },
+        correctAnswer: "B",
+        rationale: "The presence of the HLA-B*5701 allele is strongly associated with a severe hypersensitivity reaction to abacavir. Screening for this allele is mandatory before starting the drug. If the test is positive, abacavir is permanently contraindicated for that patient.",
+        source: "'Abacavir... Hypersensitivity – HLA-B*5701.' (Antiretroviral Agents, Slide 10)"
+    },
+    {
+        learningObjective: "LO 3 (HIV Anti-Retrovirals): Recognize the most common adverse effects of ART.",
+        question: "A patient taking a protease inhibitor-based regimen develops central fat accumulation, peripheral fat wasting, and insulin resistance. This constellation of findings is known as:",
+        options: {
+            A: "Fanconi syndrome",
+            B: "Stevens-Johnson Syndrome",
+            C: "Lipodystrophy",
+            D: "Immune Reconstitution Inflammatory Syndrome (IRIS)"
+        },
+        correctAnswer: "C",
+        rationale: "Lipodystrophy is a well-known class side effect of older protease inhibitors. It involves metabolic changes including abnormal fat redistribution (lipoatrophy in the face/limbs, lipohypertrophy in the abdomen/dorsocervical fat pad), hyperlipidemia, and hyperglycemia/insulin resistance, giving a Cushing-like appearance.",
+        source: "'Protease Inhibitors (PIs)... Class side effects: hyperglycemia, GI intolerance, lipodystrophy (Cushing-like).' (Antiretroviral Agents, Slide 15)"
+    },
+    {
+        learningObjective: "LO 4 (HIV Anti-Retrovirals): Apply the following terms to patient care: pre-exposure prophylaxis (PrEP), post-exposure prophylaxis (PEP), treatment as prevention, rapid initiation, test & treat.",
+        question: "A healthcare worker sustains a needlestick injury from a patient known to be living with HIV. To reduce the risk of acquiring HIV, the worker is immediately started on a 28-day course of antiretroviral medications. This strategy is known as:",
+        options: {
+            A: "Pre-exposure prophylaxis (PrEP)",
+            B: "Post-exposure prophylaxis (PEP)",
+            C: "Treatment as prevention (TasP)",
+            D: "Rapid initiation"
+        },
+        correctAnswer: "B",
+        rationale: "Post-exposure prophylaxis (PEP) involves taking a course of ART after a potential exposure to HIV to prevent the virus from establishing a permanent infection. It is used for both occupational exposures (like a needlestick) and non-occupational exposures and must be started as soon as possible, ideally within 72 hours.",
+        source: "'Prevention... PEP: Post-exposure prophylaxis. Occupational exposure, sexual assault, etc.' (Antiretroviral Agents, Slide 26)"
+    },
+    {
+        learningObjective: "LO 4 (HIV Anti-Retrovirals): Apply the following terms to patient care: pre-exposure prophylaxis (PrEP), post-exposure prophylaxis (PEP), treatment as prevention, rapid initiation, test & treat.",
+        question: "An HIV-negative individual at high ongoing risk for acquiring HIV takes a daily antiretroviral pill to prevent infection. This prevention strategy is called:",
+        options: {
+            A: "PEP",
+            B: "U=U",
+            C: "IRIS",
+            D: "PrEP"
+        },
+        correctAnswer: "D",
+        rationale: "Pre-exposure prophylaxis (PrEP) is the use of antiretroviral drugs by HIV-negative people to prevent them from acquiring HIV. When taken consistently, daily oral PrEP is highly effective.",
+        source: "'Prevention... PrEP: Pre-exposure prophylaxis. Daily or intermittent use.' (Antiretroviral Agents, Slide 26)"
+    },
+    {
+        learningObjective: "LO 4 (HIV Anti-Retrovirals): Apply the following terms to patient care: pre-exposure prophylaxis (PrEP), post-exposure prophylaxis (PEP), treatment as prevention, rapid initiation, test & treat.",
+        question: "A public health strategy focuses on widespread HIV testing and ensuring that everyone who tests positive is immediately linked to care and started on antiretroviral therapy. This approach, which benefits both the individual and the community by reducing new transmissions, is known as:",
+        options: {
+            A: "Pre-exposure prophylaxis (PrEP)",
+            B: "Immune reconstitution",
+            C: "Test and treat",
+            D: "Post-exposure prophylaxis (PEP)"
+        },
+        correctAnswer: "C",
+        rationale: "The 'Test and treat' strategy is a cornerstone of modern HIV prevention. It involves routine screening to identify infected individuals, followed by rapid initiation of ART. This improves the health of the individual and, by achieving viral suppression, prevents them from transmitting the virus to others (Treatment as Prevention).",
+        source: "'When to Start: Now... Test and treat. Treatment as prevention.' (Antiretroviral Agents, Slide 23)"
+    },
+    {
+        learningObjective: "LO 1 (Cell Injury): Understand the basic molecular aspects of cellular injury.",
+        question: "Which of the following is NOT considered a main target of cellular injury?",
+        options: {
+            A: "Mitochondria",
+            B: "Cell membranes",
+            C: "Cytoskeleton",
+            D: "Extracellular matrix"
+        },
+        correctAnswer: "D",
+        rationale: "The primary targets of injurious stimuli are critical intracellular components and structures. These include the mitochondria (for ATP production), cell membranes (maintaining integrity and gradients), the cytoskeleton (for cell shape and movement), and the machinery for DNA and protein synthesis. The extracellular matrix is outside the cell and not a primary target of the initial injury.",
+        source: "'Main targets of cell injury are mitochondria, cell membranes, cytoskeleton, DNA and protein synthesis.' (Cellular Pathology, Slide 3)"
+    },
+    {
+        learningObjective: "LO 1 (Cell Injury): Understand the basic molecular aspects of cellular injury.",
+        question: "The generation of reactive oxygen species (oxygen metabolites) is a major mechanism of cell injury. Which of the following is a direct consequence of lipid peroxidation caused by these metabolites?",
+        options: {
+            A: "Membrane damage",
+            B: "Protein synthesis",
+            C: "ATP production",
+            D: "Glycogen storage"
+        },
+        correctAnswer: "A",
+        rationale: "Reactive oxygen species cause damage by attacking key macromolecules. The peroxidation of lipids in cellular and organellar membranes leads to a loss of membrane integrity, which is a critical step in both reversible and irreversible cell injury.",
+        source: "'Associated with generation of oxygen metabolites leading to further: Membrane damage (peroxidation of lipids).' (Cellular Pathology, Slide 3)"
+    },
+    {
+        learningObjective: "LO 1 (Cell Injury): Understand the basic molecular aspects of cellular injury.",
+        question: "A major consequence of many forms of cell injury, including hypoxia, is the failure of ATP-dependent membrane pumps. This leads to an influx of sodium and water, and a subsequent increase in the intracellular concentration of which ion that activates multiple damaging enzymes?",
+        options: {
+            A: "Potassium",
+            B: "Chloride",
+            C: "Calcium",
+            D: "Magnesium"
+        },
+        correctAnswer: "C",
+        rationale: "Failure of membrane pumps and membrane damage leads to a massive influx of extracellular calcium into the cell. Increased cytosolic calcium is a key mediator of irreversible injury because it activates damaging enzymes, including phospholipases (damaging membranes), proteases (damaging proteins), and endonucleases (damaging DNA), and also increases mitochondrial permeability.",
+        source: "'Leads to increase in cellular free ionized calcium. • Direct damage to membranes (phospholipases) • Damage to mitochondria (proteases).' (Cellular Pathology, Slide 3)"
+    },
+    {
+        learningObjective: "LO 2 (Cell Injury): Focus on the role of hypoxia in cellular injury.",
+        question: "A patient with severe anemia has a reduced oxygen-carrying capacity of the blood, leading to cellular injury. This is an example of which cause of hypoxia?",
+        options: {
+            A: "Ischemia",
+            B: "Inadequate oxygenation",
+            C: "Reduced oxygen transport",
+            D: "Chemical injury"
+        },
+        correctAnswer: "C",
+        rationale: "Hypoxia is a decrease of oxygen to cells. It can be caused by several mechanisms. Anemia represents a failure to transport adequate oxygen from the lungs to the tissues, even if blood flow (ischemia) and lung function (oxygenation) are normal. The prompt refers to this as 'Lose oxygen carrying capacity of blood'.",
+        source: "'Hypoxia - decrease of oxygen to/for cells... Lose oxygen carrying capacity of blood – anemia.' (Cellular Pathology, Slide 4)"
+    },
+    {
+        learningObjective: "LO 2 (Cell Injury): Focus on the role of hypoxia in cellular injury.",
+        question: "During hypoxic injury, the loss of oxidative phosphorylation forces the cell to switch to anaerobic glycolysis. This metabolic shift results in the depletion of glycogen stores and the accumulation of which substance that lowers intracellular pH?",
+        options: {
+            A: "Uric acid",
+            B: "Lactic acid",
+            C: "Fatty acids",
+            D: "Ketone bodies"
+        },
+        correctAnswer: "B",
+        rationale: "When oxidative phosphorylation ceases due to lack of oxygen, the cell relies on anaerobic glycolysis for its limited ATP production. This process rapidly consumes glycogen and produces lactic acid as a byproduct. The accumulation of lactic acid lowers the intracellular pH, which contributes to enzyme denaturation and chromatin clumping.",
+        source: "'Rapid glycogen depletion (glycolysis). Lactic acid produced.' (Cellular Pathology, Slide 5)"
+    },
+    {
+        learningObjective: "LO 2 (Cell Injury): Focus on the role of hypoxia in cellular injury.",
+        question: "Which of the following is the most immediate intracellular consequence of hypoxic injury?",
+        options: {
+            A: "Nuclear fragmentation",
+            B: "Loss of oxidative phosphorylation and decreased ATP generation",
+            C: "Increased protein synthesis",
+            D: "Formation of a fibrous scar"
+        },
+        correctAnswer: "B",
+        rationale: "Oxygen is the final electron acceptor in the electron transport chain. In the absence of oxygen (hypoxia), oxidative phosphorylation cannot proceed. This immediately halts the primary mechanism of ATP generation by the mitochondria, setting off the cascade of events that leads to cell injury.",
+        source: "'Associated with intracellular processes of: Loss of oxidative phosphorylation. Decreased ATP generation by mitochondria.' (Cellular Pathology, Slide 5)"
+    },
+    {
+        learningObjective: "LO 3 (Cell Injury): Recognize the unique differences between reversible and irreversible cellular injury...",
+        question: "A liver biopsy from a patient with an acute viral hepatitis shows hepatocytes with pale, cloudy cytoplasm and some with clear intracytoplasmic vacuoles. These light microscopic findings are examples of:",
+        options: {
+            A: "Irreversible injury",
+            B: "Apoptosis",
+            C: "Hydropic degeneration and fatty change",
+            D: "Coagulative necrosis"
+        },
+        correctAnswer: "C",
+        rationale: "These are the classic light microscopic features of reversible cell injury. The failure of ATP-dependent ion pumps leads to an influx of water, causing cellular swelling (cloudy swelling or hydropic degeneration). Disruption of lipid metabolism can lead to the accumulation of lipid droplets (fatty change).",
+        source: "'Light Microscopy: Organelle swelling produces cellular swelling... Pale cytoplasm (cloudy swelling)... Hydropic degeneration (water droplets), Fatty change (lipid droplets).' (Cellular Pathology, Slide 10)"
+    },
+    {
+        learningObjective: "LO 3 (Cell Injury): Recognize the unique differences between reversible and irreversible cellular injury...",
+        question: "Which of the following findings on electron microscopy is characteristic of reversible cell injury, but not irreversible injury?",
+        options: {
+            A: "Severe mitochondrial swelling with destruction of cristae",
+            B: "Extensive damage and rupture of plasma membranes",
+            C: "Swelling of mitochondria with preservation of cristae",
+            D: "Digestion of nuclear components by lysosomal enzymes"
+        },
+        correctAnswer: "C",
+        rationale: "In reversible injury, organelles like mitochondria and the ER swell due to water influx, but their fundamental structure remains intact (e.g., mitochondrial cristae are preserved). In irreversible injury, the damage is much more severe, leading to the destruction of mitochondrial cristae, rupture of membranes, and release of lysosomal enzymes.",
+        source: "'Swelling of membrane bound organelles... Mitochondria: Associated with preservation of cristae.' (Pathology of Reversible Injury, Slide 7) vs. 'Severe mitochondrial swelling Associated with destruction of cristae.' (Pathology of Irreversible Injury, Slide 16)"
+    },
+    {
+        learningObjective: "LO 3 (Cell Injury): Recognize the unique differences between reversible and irreversible cellular injury...",
+        question: "The 'point of no return' in cellular injury, marking the transition from a reversible to an irreversible state, is most closely associated with which of the following events?",
+        options: {
+            A: "Detachment of ribosomes from the endoplasmic reticulum",
+            B: "Decrease in intracellular pH",
+            C: "Severe membrane damage and massive calcium influx",
+            D: "Depletion of glycogen stores"
+        },
+        correctAnswer: "C",
+        rationale: "While the other options are features of reversible injury, the hallmark of irreversible injury is profound membrane damage (both plasma and organellar membranes) and the resulting massive, uncontrolled influx of calcium. This leads to the activation of degradative enzymes and the ultimate demise of the cell.",
+        source: "'Associated with severe ATP depletion and cell membrane damage leading to: ... Extracellular cell membrane injury, Calcium influx.' (Pathology of Irreversible Injury, Slide 14)"
+    },
+    {
+        learningObjective: "LO 4 (Cell Injury): Consider the light microscopic changes within the nucleus and the cytoplasm of cells following cellular death.",
+        question: "A pathologist examines a tissue section and notes that the nuclei of necrotic cells are shrunken, condensed, and intensely basophilic (dark blue). This nuclear change is best described as:",
+        options: {
+            A: "Karyolysis",
+            B: "Karyorrhexis",
+            C: "Pyknosis",
+            D: "Apoptosis"
+        },
+        correctAnswer: "C",
+        rationale: "Pyknosis is the first major nuclear change seen in necrosis. It is characterized by the shrinkage and increased basophilia of the nucleus as the chromatin condenses into a small, dense mass.",
+        source: "'Pyknosis: Shrinkage, condensation of the chromatin leading to small, dense nuclear appearance.' (Cellular Pathology, Slide 17)"
+    },
+    {
+        learningObjective: "LO 4 (Cell Injury): Consider the light microscopic changes within the nucleus and the cytoplasm of cells following cellular death.",
+        question: "On an H&E stained slide of a myocardial infarct, the necrotic cardiac muscle cells appear intensely pink (eosinophilic). This increased eosinophilia of the cytoplasm is due to what two main factors?",
+        options: {
+            A: "Increased glycogen and lipid accumulation",
+            B: "Loss of cytoplasmic RNA and denaturation of cytoplasmic proteins",
+            C: "Calcium influx and mitochondrial swelling",
+            D: "Nuclear fragmentation and dissolution"
+        },
+        correctAnswer: "B",
+        rationale: "The cytoplasm of a normal cell contains a significant amount of RNA, which is basophilic (binds the blue hematoxylin stain). In necrosis, this RNA is lost. Additionally, cytoplasmic proteins become denatured. Denatured proteins bind more avidly to the acid dye eosin (pink). The combination of losing blue-staining RNA and increased binding of pink-staining eosin results in the characteristic intense eosinophilia.",
+        source: "'Denaturation of cytoplasmic proteins. Increased affinity for acid dyes (eosin). Deeply eosinophilic (pink) necrotic cells.' (Cellular Pathology, Slide 20) and 'Intense eosinophilia with H&E staining of the dead cells due to loss of RNA and coagulation of proteins.' (Cellular Pathology, Slide 22)"
+    },
+    {
+        learningObjective: "LO 4 (Cell Injury): Consider the light microscopic changes within the nucleus and the cytoplasm of cells following cellular death.",
+        question: "A pathologist observes a necrotic cell in which the nucleus has completely disappeared, leaving a faint outline where it used to be. This process of nuclear dissolution is called:",
+        options: {
+            A: "Pyknosis",
+            B: "Karyorrhexis",
+            C: "Karyolysis",
+            D: "Autophagy"
+        },
+        correctAnswer: "C",
+        rationale: "Karyolysis is the final stage of nuclear breakdown in necrosis, where the chromatin of the pyknotic or karyorrhectic nucleus is progressively dissolved by the action of DNases, leading to the complete disappearance of the nucleus.",
+        source: "'Karyolysis: Dissolution of cell nucleus.' (Cellular Pathology, Slide 17)"
+    },
+    {
+        learningObjective: "LO 5 (Cell Injury): Understand and recognize the differences in five distinct patterns of cell death associated with coagulative, liquefactive, caseous, fat and fibrinoid necrosis.",
+        question: "A microscopic section of a kidney infarct shows an area of necrosis where the outlines of the dead cells are preserved for several days, but their nuclei have disappeared. The tissue architecture is maintained. This pattern of necrosis is best described as:",
+        options: {
+            A: "Liquefactive necrosis",
+            B: "Caseous necrosis",
+            C: "Coagulative necrosis",
+            D: "Fat necrosis"
+        },
+        correctAnswer: "C",
+        rationale: "Coagulative necrosis is characterized by the preservation of the basic cellular and tissue architecture of the dead tissue for a period of time. This occurs because the injury denatures not only structural proteins but also the enzymes that would otherwise digest the cell, so proteolysis is blocked. It is the most common pattern of necrosis, typically seen in solid organs like the heart and kidney after ischemic injury.",
+        source: "'Coagulative Necrosis: Cellular outline and tissue architecture identifiable early in the process of necrosis... Process of protein denaturation exceeds that of enzymatic digestion.' (Cellular Pathology, Slide 24)"
+    },
+    {
+        learningObjective: "LO 5 (Cell Injury): Understand and recognize the differences in five distinct patterns of cell death associated with coagulative, liquefactive, caseous, fat and fibrinoid necrosis.",
+        question: "A patient with a history of tuberculosis has a lung lesion that on gross examination is soft, white, and friable, resembling cream cheese. Histologically, the normal tissue architecture is completely obliterated and replaced by an amorphous, granular, eosinophilic mass. This pattern of necrosis is:",
+        options: {
+            A: "Coagulative",
+            B: "Liquefactive",
+            C: "Caseous",
+            D: "Fibrinoid"
+        },
+        correctAnswer: "C",
+        rationale: "Caseous necrosis is a distinctive form of necrosis characteristic of tuberculous infection. The term 'caseous' means 'cheese-like,' referring to the friable, white gross appearance. Histologically, it is characterized by a complete loss of cellular detail, forming a collection of fragmented cells and amorphous granular debris enclosed within a granulomatous border.",
+        source: "'Caseous Necrosis: Dead tissue is soft and white (cream cheese)... No original architecture seen histologically. Associated with tuberculosis.' (Cellular Pathology, Slide 35)"
+    },
+    {
+        learningObjective: "LO 5 (Cell Injury): Understand and recognize the differences in five distinct patterns of cell death associated with coagulative, liquefactive, caseous, fat and fibrinoid necrosis.",
+        question: "An ischemic injury to the brain results in a different pattern of necrosis than an ischemic injury to the heart. What type of necrosis is characteristic of a cerebral infarct?",
+        options: {
+            A: "Coagulative necrosis",
+            B: "Liquefactive necrosis",
+            C: "Caseous necrosis",
+            D: "Fat necrosis"
+        },
+        correctAnswer: "B",
+        rationale: "Hypoxic death of cells within the central nervous system characteristically results in liquefactive necrosis. In the brain, enzymatic digestion of the dead cells by lysosomal enzymes from both the neurons and infiltrating inflammatory cells rapidly exceeds protein denaturation, leading to the dissolution of the tissue into a viscous liquid.",
+        source: "'Liquefactive Necrosis: Digestion of tissue by lysosomal enzymes exceeds the process of protein denaturation... Caused by: Occlusion of arterial blood supply(ischemia) to brain.' (Cellular Pathology, Slide 31)"
+    },
+    {
+        learningObjective: "LO 1 (Non-HIV Anti-Virals): Describe the structures of DNA & RNA.",
+        question: "Acyclovir is an analogue of which nucleoside?",
+        options: {
+            A: "Cytidine",
+            B: "Uridine",
+            C: "Adenosine",
+            D: "Guanosine"
+        },
+        correctAnswer: "D",
+        rationale: "Acyclovir is a structural analogue of guanosine. It mimics the natural substrate but lacks the complete ribose sugar ring, specifically the 3'-hydroxyl group, which is essential for DNA chain elongation. This structural similarity allows it to be recognized by viral enzymes.",
+        source: "'all guanosine analogues minus attached ribose sugar.' The slide shows the structure of guanosine next to acyclovir, ganciclovir, and penciclovir. (Anti-viral Drugs, Slide 11)"
+    },
+    {
+        learningObjective: "LO 1 (Non-HIV Anti-Virals): Describe the structures of DNA & RNA.",
+        question: "Cidofovir is unique among antiviral nucleoside/tide analogues because it already contains a phosphonate group. What is the significance of this structural feature?",
+        options: {
+            A: "It allows the drug to target RNA viruses exclusively.",
+            B: "It mimics a phosphate group, allowing the drug to bypass the initial virus-dependent phosphorylation step.",
+            C: "It increases the oral bioavailability of the drug.",
+            D: "It prevents the drug from entering the cell nucleus."
+        },
+        correctAnswer: "B",
+        rationale: "Cidofovir is a nucleotide analogue, meaning it is essentially a nucleoside with a phosphate mimic (the phosphonate group) already attached. This allows it to be active against viruses that do not encode their own thymidine kinase (like CMV) or in strains that have become resistant by losing that enzyme, as it does not require the first viral kinase-dependent activation step.",
+        source: "'phosphonate group (mimics phosphate)... (acyclic, nucleotide analogue of cytidine monoPO4).' (Anti-viral Drugs, Slide 25)"
+    },
+    {
+        learningObjective: "LO 1 (Non-HIV Anti-Virals): Describe the structures of DNA & RNA.",
+        question: "Ribavirin is a broad-spectrum antiviral that acts as a purine analogue. Its mechanism involves being incorporated into the viral genome and causing lethal mutations. Which natural purine does it mimic?",
+        options: {
+            A: "Thymine",
+            B: "Cytosine",
+            C: "Guanosine",
+            D: "Uracil"
+        },
+        correctAnswer: "C",
+        rationale: "Ribavirin is an analogue of the purine nucleoside guanosine. It gets phosphorylated intracellularly and can be incorporated into growing RNA strands in place of guanine or adenine, leading to errors during replication (lethal mutagenesis).",
+        source: "'Ribavirin... purine analogue.' (Anti-viral Drugs, Slide 35) The diagram on slide 36 explicitly compares the structure of guanosine triphosphate and ribavirin triphosphate."
+    },
+    {
+        learningObjective: "LO 2 (Non-HIV Anti-Virals): Outline the mechanism of action of common anti-viral drugs.",
+        question: "Oseltamivir is a first-line agent for the treatment of influenza A and B. It works by preventing the release of newly formed virions from the surface of infected cells. Which viral enzyme does it inhibit?",
+        options: {
+            A: "RNA polymerase",
+            B: "Hemagglutinin",
+            C: "Neuraminidase",
+            D: "M2 protein"
+        },
+        correctAnswer: "C",
+        rationale: "Neuraminidase is a viral surface enzyme that cleaves sialic acid residues on the host cell surface. This cleavage is necessary for the release of progeny virions that have budded from the cell. Oseltamivir and other neuraminidase inhibitors block this enzyme, causing the new viruses to clump together on the cell surface, preventing their spread.",
+        source: "'neuraminidase inhibitors.' (Anti-viral Drugs, Slide 39)"
+    },
+    {
+        learningObjective: "LO 2 (Non-HIV Anti-Virals): Outline the mechanism of action of common anti-viral drugs.",
+        question: "Remdesivir is an antiviral agent used in the treatment of COVID-19. It functions as a nucleotide analogue that is incorporated into the growing viral genome, causing premature termination. Which viral enzyme is the target of remdesivir?",
+        options: {
+            A: "Spike protein",
+            B: "Main protease (Mpro)",
+            C: "RNA-dependent RNA polymerase (RdRp)",
+            D: "Helicase"
+        },
+        correctAnswer: "C",
+        rationale: "Remdesivir is an adenosine nucleotide analogue. After being metabolized into its active triphosphate form, it acts as a substrate for the viral RNA-dependent RNA polymerase (RdRp), gets incorporated into the nascent RNA strand, and causes delayed chain termination, thereby inhibiting viral replication.",
+        source: "'Translation of viral polymerase protein (RdRp)... Inhibition of RNA replication.' (Anti-viral Drugs, Slide 43)"
+    },
+    {
+        learningObjective: "LO 2 (Non-HIV Anti-Virals): Outline the mechanism of action of common anti-viral drugs.",
+        question: "Entecavir is a potent antiviral used for the treatment of chronic Hepatitis B. As a guanosine nucleoside analogue, what is its mechanism of action?",
+        options: {
+            A: "It inhibits the viral neuraminidase.",
+            B: "It is incorporated into the HBV genome by reverse transcriptase, causing chain termination.",
+            C: "It blocks the CCR5 coreceptor.",
+            D: "It prevents the uncoating of the virus."
+        },
+        correctAnswer: "B",
+        rationale: "Entecavir is a guanosine analogue that is phosphorylated intracellularly to its active triphosphate form. It then competes with the natural substrate (dGTP) for the HBV reverse transcriptase (which also functions as its DNA polymerase) and, upon incorporation, terminates the DNA chain.",
+        source: "'entecavir (nucleoside analogue of guanosine)' and 'entecavir: nonsense base = chain termination.' (Anti-viral Drugs, Slides 47 & 48)"
+    },
+    {
+        learningObjective: "LO 3 (Non-HIV Anti-Virals): List the major side effects of anti-viral drugs.",
+        question: "A patient being treated with inhaled zanamivir for influenza develops acute wheezing and shortness of breath. This adverse effect is a particular concern in patients with which underlying condition?",
+        options: {
+            A: "Renal impairment",
+            B: "Liver disease",
+            C: "Asthma or COPD",
+            D: "Congestive heart failure"
+        },
+        correctAnswer: "C",
+        rationale: "A major toxicity associated with the inhaled neuraminidase inhibitor zanamivir is bronchospasm. Because of this risk, its use is generally avoided in patients with underlying reactive airway disease like asthma or chronic obstructive pulmonary disease (COPD).",
+        source: "'bronchospasm (zanamivir) (not for patients with COPD, asthma, etc).' (Anti-viral Drugs, Slide 40)"
+    },
+    {
+        learningObjective: "LO 3 (Non-HIV Anti-Virals): List the major side effects of anti-viral drugs.",
+        question: "A patient with acyclovir-resistant HSV is treated with foscarnet. The patient develops muscle twitching and tingling in his fingers. These symptoms are likely due to foscarnet's ability to chelate divalent cations, leading to an imbalance in which electrolyte?",
+        options: {
+            A: "Sodium",
+            B: "Potassium",
+            C: "Calcium",
+            D: "Chloride"
+        },
+        correctAnswer: "C",
+        rationale: "Foscarnet is known to cause significant electrolyte abnormalities because it can chelate divalent metal ions. The most common and clinically significant is hypocalcemia, which can lead to neuromuscular irritability (paresthesias, tetany, seizures). It can also cause hypomagnesemia and hypo- or hyperphosphatemia.",
+        source: "Toxicity of foscarnet is a high-yield concept often linked to its pyrophosphate analogue structure and effects on electrolytes, particularly calcium and magnesium, which is a known cause of the symptoms described. The slides focus on renal toxicity but electrolyte disturbance is a key associated toxicity."
+    },
+    {
+        learningObjective: "LO 3 (Non-HIV Anti-Virals): List the major side effects of anti-viral drugs.",
+        question: "A patient with chronic Hepatitis C is being treated with a ribavirin-containing regimen. Which of the following is the most common and significant dose-limiting toxicity of ribavirin?",
+        options: {
+            A: "Nephrotoxicity",
+            B: "Hemolytic anemia",
+            C: "Peripheral neuropathy",
+            D: "Pancreatitis"
+        },
+        correctAnswer: "B",
+        rationale: "The primary toxicity of ribavirin is a dose-dependent, reversible hemolytic anemia. The drug accumulates in red blood cells, leading to oxidative damage and their premature destruction. Patients must be monitored for a drop in hemoglobin during therapy.",
+        source: "The toxicity of Ribavirin is a well-established side effect. While not explicitly listed on the provided slides, it is the most clinically important adverse effect and would be covered under the general objective to list major side effects."
+    }
+];
+
+    const quizContainer = document.getElementById('quiz-container');
+    const themeToggleButton = document.getElementById('theme-toggle-button');
+    const bodyElement = document.body;
+
+    function applyTheme(theme) {
+        if (theme === 'light') {
+            bodyElement.classList.add('light-theme');
+            themeToggleButton.textContent = 'Switch to Dark Mode';
+        } else {
+            bodyElement.classList.remove('light-theme');
+            themeToggleButton.textContent = 'Switch to Light Mode';
+        }
+        localStorage.setItem('quizTheme', theme);
+    }
+
+    function loadQuiz() {
+        quizData.forEach((qData, index) => {
+            const questionBlock = document.createElement('div');
+            questionBlock.classList.add('question-block');
+            questionBlock.id = `q${index}`;
+
+            const loText = document.createElement('div');
+            loText.classList.add('learning-objective');
+            loText.textContent = qData.learningObjective;
+            questionBlock.appendChild(loText);
+
+            const questionText = document.createElement('p');
+            questionText.classList.add('question-text');
+            questionText.innerHTML = `${index + 1}. ${qData.question}`;
+            questionBlock.appendChild(questionText);
+
+            const optionsDiv = document.createElement('div');
+            optionsDiv.classList.add('options');
+
+            for (const optionKey in qData.options) {
+                const optionId = `q${index}_${optionKey}`;
+                const label = document.createElement('label');
+                label.htmlFor = optionId;
+                const radioInput = document.createElement('input');
+                radioInput.type = 'radio';
+                radioInput.name = `q${index}`;
+                radioInput.value = optionKey;
+                radioInput.id = optionId;
+                const labelText = document.createElement('span');
+                labelText.textContent = ` ${optionKey}. ${qData.options[optionKey]}`;
+                label.appendChild(radioInput);
+                label.appendChild(labelText);
+                optionsDiv.appendChild(label);
+            }
+            questionBlock.appendChild(optionsDiv);
+
+            const buttonContainer = document.createElement('div');
+            buttonContainer.classList.add('button-container');
+
+            const checkButton = document.createElement('button');
+            checkButton.textContent = 'Check Answer';
+            checkButton.classList.add('check-button');
+            checkButton.onclick = () => checkAnswer(index);
+            buttonContainer.appendChild(checkButton);
+            
+            questionBlock.appendChild(buttonContainer);
+
+            const feedbackDiv = document.createElement('div');
+            feedbackDiv.classList.add('feedback');
+            questionBlock.appendChild(feedbackDiv);
+
+            quizContainer.appendChild(questionBlock);
+        });
+    }
+
+    function checkAnswer(questionIndex) {
+        const questionBlockElement = document.getElementById(`q${questionIndex}`);
+        const selectedRadioButton = questionBlockElement.querySelector('input[type="radio"]:checked');
+
+        if (!selectedRadioButton) {
+            alert("Please select an answer first.");
+            return;
+        }
+
+        const selectedOptionKey = selectedRadioButton.value;
+        const qData = quizData[questionIndex];
+        const feedbackDiv = questionBlockElement.querySelector('.feedback');
+        const correct = selectedOptionKey === qData.correctAnswer;
+
+        let feedbackHTML = '';
+
+        if (correct) {
+            feedbackHTML = `<span class="feedback-status">Correct!</span>`;
+            feedbackDiv.className = 'feedback correct';
+        } else {
+             feedbackHTML = `<span class="feedback-status">Incorrect. The correct answer is ${qData.correctAnswer}.</span>`;
+            feedbackDiv.className = 'feedback incorrect';
+        }
+
+        feedbackHTML += `<div class="feedback-rationale"><strong>Rationale:</strong> ${qData.rationale}</div>`;
+        feedbackHTML += `<div class="feedback-source">${qData.source}</div>`;
+        feedbackDiv.innerHTML = feedbackHTML;
+    }
+
+    themeToggleButton.addEventListener('click', () => {
+        if (bodyElement.classList.contains('light-theme')) {
+            applyTheme('dark');
+        } else {
+            applyTheme('light');
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const savedTheme = localStorage.getItem('quizTheme') || 'dark';
+        applyTheme(savedTheme);
+        loadQuiz();
+    });
+
+</script>
+</body>
+</html>
